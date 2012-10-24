@@ -12,4 +12,6 @@ Instead, it contains Linux ELF binaries.  It is for use with the
 linux-i686-gcc cross compiler, and installs into the
 /usr/i686-pc-linux-gnu/sys-root/usr/{lib,include} directories."
 
+PATCH_URI="01-no-undefined.patch"
+
 KEEP_LA_FILES="none"

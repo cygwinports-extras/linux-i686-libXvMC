@@ -1,0 +1,26 @@
+--- a/configure.ac
++++ b/configure.ac
+@@ -46,6 +46,12 @@ PKG_CHECK_MODULES(XVMC, x11 xext xv xextproto videoproto)
+ # Checks for library functions.
+ AC_CHECK_FUNCS([shmat])
+ 
++# Check to see if dlopen is in default libraries (like Solaris, which
++# has it in libc), or if libdl is needed to get it.
++AC_CHECK_FUNC([dlopen], [],
++	AC_CHECK_LIB([dl], [dlopen], DLOPEN_LIBS="-ldl"))
++AC_SUBST(DLOPEN_LIBS)
++
+ # Allow checking code with lint, sparse, etc.
+ XORG_WITH_LINT
+ LINT_FLAGS="${LINT_FLAGS} ${XVMC_CFLAGS}"
+--- a/wrapper/Makefile.am
++++ b/wrapper/Makefile.am
+@@ -10,7 +10,7 @@ AM_CPPFLAGS = 					\
+ AM_CFLAGS = $(CWARNFLAGS) $(XVMC_CFLAGS)
+ 
+ libXvMCW_la_SOURCES = XvMCWrapper.c
+-libXvMCW_la_LIBADD = $(XVMC_LIBS)
++libXvMCW_la_LIBADD = $(XVMC_LIBS) $(DLOPEN_LIBS)
+ libXvMCW_la_LDFLAGS = -version-number 1:0:0 -no-undefined
+ 
+ if LINT
